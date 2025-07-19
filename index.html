@@ -132,7 +132,6 @@
     }
   }
 
-  // فقط بار اول لود شدن iframe مهم است
   function handleIframeLoad() {
     if (firstLoad) {
       checkReady();
@@ -141,7 +140,6 @@
     }
   }
 
-  // بررسی آماده بودن کامل موزیک
   const checkAudioInterval = setInterval(() => {
     if (audio.readyState >= 4) {
       audioReady = true;
@@ -150,16 +148,17 @@
     }
   }, 200);
 
-  // وقتی صفحه لود شد، همه چیز شروع کن
   window.addEventListener("DOMContentLoaded", () => {
-    audio.load(); // شروع بافر آهنگ
+    if (firstLoad) {
+      audio.load();
+      frame.addEventListener("load", handleIframeLoad);
+    }
     loadPageFromHash();
-    frame.addEventListener("load", handleIframeLoad);
   });
 
-  // کلیک روی overlay → وارد سایت
   overlay.addEventListener("click", () => {
-    overlay.style.display = "none";
+    overlay.remove(); // به جای hide کردن، حذف کامل
+    loading.remove(); // حذف کامل لودینگ
     frame.style.display = "block";
     audio.play().catch(() => {
       const resume = () => {
@@ -168,18 +167,17 @@
       };
       document.addEventListener("click", resume);
     });
-    firstLoad = false; // از اینجا به بعد لودینگ دیگه لازم نیست
+    firstLoad = false;
   });
 
-  // تغییر صفحه با هَش
   function loadPageFromHash() {
     const page = location.hash.substring(1) || "home.html";
     frame.src = page;
   }
 
   window.addEventListener("hashchange", () => {
-    frame.style.display = "none"; // فید بشه برای صفحه جدید
-    loadPageFromHash();           // فقط iframe عوض بشه
+    frame.style.display = "none";
+    loadPageFromHash();
   });
 </script>
 
