@@ -116,22 +116,16 @@
   <!-- موزیک -->
   <audio id="bgMusic" src="Idea 22 Gibran Alcocer.mp3" loop></audio>
 
-  <script>
+<script>
   const audio = document.getElementById("bgMusic");
   const overlay = document.getElementById("startOverlay");
   const loading = document.getElementById("loadingScreen");
   const frame = document.getElementById("contentFrame");
 
-  let pageReady = false;
+  let firstLoad = true;       // فقط بار اول true هست
   let audioReady = false;
 
-  // بارگذاری iframe
-  frame.addEventListener("load", () => {
-    pageReady = true;
-    checkReady();
-  });
-
-  // چک کردن وضعیت آماده بودن واقعی فایل صوتی
+  // بررسی آماده بودن کامل موزیک
   const checkAudioInterval = setInterval(() => {
     if (audio.readyState === 4) {
       audioReady = true;
@@ -140,20 +134,44 @@
     }
   }, 300);
 
+  // بارگذاری اولیه
+  window.addEventListener("DOMContentLoaded", () => {
+    audio.load();
+    loadPageFromHash();
+  });
+
+  // لود کامل iframe
+  frame.addEventListener("load", () => {
+    if (firstLoad) {
+      checkReady(); // فقط بار اول نیاز داریم
+    } else {
+      frame.style.display = "block"; // برای صفحات بعدی
+    }
+  });
+
+  // بررسی اگر هردو آماده بودن
   function checkReady() {
-    if (pageReady && audioReady) {
+    if (audioReady && firstLoad) {
       loading.style.display = "none";
       overlay.style.display = "flex";
     }
   }
 
-  // بارگذاری فایل صوتی به صورت دستی
-  window.addEventListener("DOMContentLoaded", () => {
-    loadPageFromHash();
-    audio.load(); // شروع بافرینگ
+  // کلیک روی overlay
+  overlay.addEventListener("click", () => {
+    overlay.style.display = "none";
+    frame.style.display = "block";
+    audio.play().catch(() => {
+      const resume = () => {
+        audio.play();
+        document.removeEventListener("click", resume);
+      };
+      document.addEventListener("click", resume);
+    });
+    firstLoad = false;
   });
 
-  // مدیریت hash برای iframe
+  // تعویض صفحات
   function loadPageFromHash() {
     const page = location.hash.substring(1) || "home.html";
     frame.src = page;
@@ -163,21 +181,8 @@
     frame.style.display = "none";
     loadPageFromHash();
   });
-
-  // کلیک روی صفحه استارت
-  overlay.addEventListener("click", () => {
-    overlay.style.display = "none";
-    frame.style.display = "block";
-
-    audio.play().catch(() => {
-      const resume = () => {
-        audio.play();
-        document.removeEventListener("click", resume);
-      };
-      document.addEventListener("click", resume);
-    });
-  });
 </script>
+
 
 </body>
 </html>
