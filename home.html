@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alone knight</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="main">
+    <nav>
+      <div class="logo">Alone knight</div>
+      <div class="links">
+        <a href="home.html"><div>Home</div></a>
+        <a href="service.html"><div>Services</div></a>
+      </div>
+      <div class="menu-toggle">&#9776;</div>
+    </nav>
+
+    <div class="home">
+      <div class="imghome"></div>
+      <div class="hometxt">
+        <div class="head">
+          <span>Hi, I'm </span><span>Alone knight</span>
+        </div>
+        <div class="subhead">
+          <span>I build </span><span>personal websites</span><span class="cursor">|</span>
+        </div>
+        <p class="desc">
+          I'm a web developer specialized in creating modern and responsive personal websites. I focus on clean design,
+          performance, and usability to help individuals showcase themselves effectively online.
+        </p>
+        <div class="social">
+          <a href="https://github.com/AloneKnight69" target="_blank"><img src="https://img.icons8.com/ios_filled/512/github.png"
+              alt="Github" /></a>
+          <a href="https://t.me/alone69knight" target="_blank"><img src="https://img.icons8.com/ios_filled/512/telegram.png"
+              alt="Telegram" /></a>
+        </div>
+        <button class="hire-btn" id="hireBtn">Hire Me</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toggle = document.querySelector(".menu-toggle");
+    const links = document.querySelector(".links");
+
+    toggle.addEventListener("click", () => {
+      links.classList.toggle("active");
+    });
+
+    document.getElementById("hireBtn").addEventListener("click", () => {
+      window.location.href = "https://t.me/alone69knight";
+    });
+  </script>
+
+</body>
+
+</html>

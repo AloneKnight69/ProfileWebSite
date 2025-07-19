@@ -1,392 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Alone knight</title>
-  <style>
-    a {
-    color: inherit; /* رنگ متن والد رو میگیره، معمولاً سفید یا رنگ تعریف شده */
-    text-decoration: none; /* خط زیر لینک حذف میشه */
-    cursor: pointer;
-    transition: color 0.3s ease;
-    }
-    :root {
-      --red1: #d70610;
-      --bg-color: #000;
-      --text-color: aliceblue;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: "Poppins", sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 90vw;
-      margin: auto;
-      padding: 20px 0;
-      color: var(--text-color);
-      animation: slideDownFade 1.2s ease forwards;
-      opacity: 0;
-      box-shadow: 0 2px 8px rgba(215, 6, 16, 0);
-      transition: box-shadow 0.5s ease;
-    }
-
-    nav .logo {
-      font-size: 36px;
-      font-weight: bold;
-      color: var(--red1);
-      animation: pulseGlow 3s infinite ease-in-out;
-    }
-
-    nav .links {
-      display: flex;
-      gap: 30px;
-    }
-
-    nav .links div {
-      cursor: pointer;
-      font-weight: 600;
-      transition: color 0.3s ease;
-      position: relative;
-    }
-
-    nav .links div::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--red1);
-      transition: width 0.3s ease;
-    }
-
-    nav .links div:hover::after {
-      width: 100%;
-    }
-
-    nav .links div:hover {
-      color: var(--red1);
-    }
-
-    nav .menu-toggle {
-      display: none;
-      font-size: 28px;
-      cursor: pointer;
-      color: var(--text-color);
-    }
-
-    @media (max-width: 900px) {
-      nav .links {
-        display: none;
-        flex-direction: column;
-        gap: 20px;
-        background-color: var(--bg-color);
-        position: absolute;
-        top: 70px;
-        right: 5%;
-        border: 1px solid var(--red1);
-        border-radius: 10px;
-        padding: 15px;
-        width: 150px;
-        z-index: 10;
-      }
-
-      nav .links.active {
+    <style>
+        
+        body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        }
+        iframe {
+        border: none;
+        width: 100vw;
+        height: 100vh;
+        }
+        #startOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: black;
+        color: white;
+        font-family: sans-serif;
         display: flex;
-      }
-
-      nav .menu-toggle {
-        display: block;
-      }
-    }
-
-    /* بخش home */
-    .home {
-      display: flex;
-      gap: 8%;
-      max-width: 90vw;
-      margin: 40px auto 80px;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      animation: fadeInUpBounce 1.5s ease forwards;
-      opacity: 0;
-    }
-
-    /* تصویر پروفایل */
-    .imghome {
-      background-image: url('profile.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-      border-radius: 50%;
-      width: 400px;
-      height: 80vh;
-      box-shadow: 0 0 25px var(--red1);
-      animation: slideInLeftGlow 1.4s ease forwards;
-      opacity: 0;
-      filter: drop-shadow(0 0 5px #d70610aa);
-      transition: transform 0.4s ease;
-    }
-
-    .imghome:hover {
-      transform: scale(1.05) rotate(2deg);
-      filter: drop-shadow(0 0 15px #ff2a2acc);
-    }
-
-    /* متن ها */
-    .hometxt {
-      max-width: 500px;
-      color: var(--text-color);
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      animation: slideInRightGlow 1.4s ease forwards;
-      opacity: 0;
-    }
-
-    .hometxt .head {
-      font-size: 44px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      text-shadow: 0 0 8px #d70610bb;
-    }
-
-    .hometxt .head span:last-child {
-      color: var(--red1);
-      text-shadow: 0 0 18px #d70610ee;
-      animation: pulseGlow 3s infinite ease-in-out;
-    }
-
-    .hometxt .subhead {
-      font-size: 30px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-
-    .hometxt .subhead span:last-child {
-      color: var(--red1);
-      font-weight: 700;
-      animation: blink 1s steps(2, start) infinite;
-      text-shadow: 0 0 12px #d70610cc;
-    }
-
-    .hometxt .desc {
-      font-size: 18px;
-      line-height: 1.6;
-      color: var(--text-color);
-      text-shadow: 0 0 6px #00000088;
-    }
-
-    .hometxt .social {
-      display: flex;
-      gap: 18px;
-      filter: invert(7%) sepia(100%) saturate(7471%) hue-rotate(356deg) brightness(104%) contrast(102%);
-    }
-
-    .hometxt .social a img {
-      height: 46px;
-      border: 2px solid black;
-      padding: 4px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      box-shadow: 0 0 8px transparent;
-    }
-
-    .hometxt .social a img:hover {
-      transform: scale(1.25) rotate(12deg);
-      box-shadow: 0 0 18px var(--red1);
-    }
-
-    .hometxt button.hire-btn {
-      background-color: transparent;
-      font-weight: 700;
-      font-size: 18px;
-      border: 3px solid var(--red1);
-      color: var(--red1);
-      padding: 14px 42px;
-      border-radius: 30px;
-      width: 220px;
-      cursor: pointer;
-      transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
-      box-shadow: 0 0 0 transparent;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .hometxt button.hire-btn:hover {
-      background-color: var(--red1);
-      color: white;
-      box-shadow: 0 0 20px var(--red1);
-      transform: scale(1.05);
-    }
-
-    /* انیمیشن های keyframe */
-
-    @keyframes slideDownFade {
-      0% {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeInUpBounce {
-      0% {
-        opacity: 0;
-        transform: translateY(50px);
-      }
-
-      60% {
-        opacity: 1;
-        transform: translateY(-15px);
-      }
-
-      80% {
-        transform: translateY(5px);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slideInLeftGlow {
-      0% {
-        opacity: 0;
-        transform: translateX(-70px);
-        filter: drop-shadow(0 0 0 transparent);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-        filter: drop-shadow(0 0 12px #d70610cc);
-      }
-    }
-
-    @keyframes slideInRightGlow {
-      0% {
-        opacity: 0;
-        transform: translateX(70px);
-        filter: drop-shadow(0 0 0 transparent);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-        filter: drop-shadow(0 0 12px #d70610cc);
-      }
-    }
-
-    @keyframes pulseGlow {
-      0%,
-      100% {
-        text-shadow: 0 0 6px #d70610cc, 0 0 12px #d70610bb, 0 0 20px #d70610ee;
-      }
-
-      50% {
-        text-shadow: 0 0 14px #ff3b3bcc, 0 0 30px #ff3b3bcc, 0 0 40px #d70610ff;
-      }
-    }
-
-    @keyframes blink {
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0;
-      }
-    }
-
-    /* ریسپانسیو */
-    @media (max-width: 900px) {
-      .home {
-        flex-direction: column;
-        margin: 30px auto 60px;
-      }
-
-      .imghome {
-        width: 250px;
-        height: 250px;
-        margin-bottom: 25px;
-      }
-
-      .hometxt {
-        max-width: 90vw;
         align-items: center;
-        text-align: center;
-      }
-    }
-  </style>
+        justify-content: center;
+        z-index: 999;
+        cursor: pointer;
+        font-size: 2rem;
+        }
+        #startOverlay span{
+            animation: neonFlicker 2.5s infinite;
+        }
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow:
+                0 0 5px #d70610,
+                0 0 10px #d70610,
+                0 0 20px #d70610,
+                0 0 40px #ff0000,
+                0 0 80px #ff0000;
+                opacity: 1;
+            }
+            20%, 22%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.6;
+            }
+            26%, 53% {
+                text-shadow:
+                0 0 2px #d70610,
+                0 0 4px #d70610,
+                0 0 6px #d70610;
+                opacity: 0.8;
+            }
+        }
+    </style>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
-
 <body>
-  <div class="main">
-    <nav>
-      <div class="logo">Alone knight</div>
-      <div class="links">
-        <a href="index.html"><div>Home</div></a>
-        <a href="service.html"><div>Services</div></a>
-      </div>
-      <div class="menu-toggle">&#9776;</div>
-    </nav>
+    <!-- پوشش شروع (برای دریافت تعامل کاربر) -->
+    <div id="startOverlay"><span>Click to Start</span></div>
 
-    <div class="home">
-      <div class="imghome"></div>
-      <div class="hometxt">
-        <div class="head">
-          <span>Hi, I'm </span><span>Alone knight</span>
-        </div>
-        <div class="subhead">
-          <span>I build </span><span>personal websites</span><span class="cursor">|</span>
-        </div>
-        <p class="desc">
-          I'm a web developer specialized in creating modern and responsive personal websites. I focus on clean design,
-          performance, and usability to help individuals showcase themselves effectively online.
-        </p>
-        <div class="social">
-          <a href="https://github.com/AloneKnight69" target="_blank"><img src="https://img.icons8.com/ios_filled/512/github.png"
-              alt="Github" /></a>
-          <a href="https://t.me/alone69knight" target="_blank"><img src="https://img.icons8.com/ios_filled/512/telegram.png"
-              alt="Telegram" /></a>
-        </div>
-        <button class="hire-btn" id="hireBtn">Hire Me</button>
-      </div>
-    </div>
-  </div>
+    <!-- iframe محتوای صفحه‌ها -->
+    <iframe src="home.html" id="contentFrame"></iframe>
 
-  <script>
-    const toggle = document.querySelector(".menu-toggle");
-    const links = document.querySelector(".links");
+    <!-- موسیقی بک‌گراند -->
+    <audio id="bgMusic" src="Idea 22 Gibran Alcocer.mp3" loop></audio>
 
-    toggle.addEventListener("click", () => {
-      links.classList.toggle("active");
-    });
+    <script>
+        const audio = document.getElementById("bgMusic");
+        const overlay = document.getElementById("startOverlay");
+        const frame = document.getElementById("contentFrame");
 
-    document.getElementById("hireBtn").addEventListener("click", () => {
-      window.location.href = "https://t.me/alone69knight";
-    });
-  </script>
+        // تعامل اول کاربر → پخش موسیقی
+        overlay.addEventListener("click", () => {
+        overlay.style.display = "none"; // حذف پوشش
+        audio.volume = 1;
+        audio.play().catch(err => console.log("Audio error:", err));
+        });
+
+        // بارگذاری صفحه مناسب با hash
+        function loadPageFromHash() {
+        const page = location.hash.substring(1) || "home.html";
+        frame.src = page;
+        }
+
+        window.addEventListener("hashchange", loadPageFromHash);
+        window.addEventListener("DOMContentLoaded", loadPageFromHash);
+    </script>
 </body>
-
 </html>

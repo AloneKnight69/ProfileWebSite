@@ -1,0 +1,353 @@
+/* ===== متغیرهای رنگ و فونت پایه ===== */
+:root {
+  --red1: #d70610;
+  --bg-color: #000;
+  --text-color: aliceblue;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* ===== منوی ناوبری (nav) ===== */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90vw;
+  margin: auto;
+  padding: 20px 0;
+  color: var(--text-color);
+  animation: slideDownFade 1.2s ease forwards;
+  opacity: 0;
+  box-shadow: 0 2px 8px rgba(215, 6, 16, 0);
+  transition: box-shadow 0.5s ease;
+}
+
+nav .logo {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--red1);
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+nav .links {
+  display: flex;
+  gap: 30px;
+}
+
+nav .links div {
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+nav .links div::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--red1);
+  transition: width 0.3s ease;
+}
+
+nav .links div:hover::after {
+  width: 100%;
+}
+
+nav .links div:hover {
+  color: var(--red1);
+}
+
+nav .menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+/* ===== HOME Section ===== */
+.home {
+  display: flex;
+  gap: 8%;
+  max-width: 90vw;
+  margin: 40px auto 80px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUpBounce 1.5s ease forwards;
+  opacity: 0;
+}
+
+.imghome {
+  background-image: url('profile.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  border-radius: 50%;
+  width: 400px;
+  height: 80vh;
+  box-shadow: 0 0 25px var(--red1);
+  animation: slideInLeftGlow 1.4s ease forwards;
+  opacity: 0;
+  filter: drop-shadow(0 0 5px #d70610aa);
+  transition: transform 0.4s ease;
+}
+
+.imghome:hover {
+  transform: scale(1.05) rotate(2deg);
+  filter: drop-shadow(0 0 15px #ff2a2acc);
+}
+
+.hometxt {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  animation: slideInRightGlow 1.4s ease forwards;
+  opacity: 0;
+}
+
+.hometxt .head {
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 8px #d70610bb;
+}
+
+.hometxt .head span:last-child {
+  color: var(--red1);
+  text-shadow: 0 0 18px #d70610ee;
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+.hometxt .subhead {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.hometxt .subhead span:last-child {
+  color: var(--red1);
+  font-weight: 700;
+  animation: blink 1s steps(2, start) infinite;
+  text-shadow: 0 0 12px #d70610cc;
+}
+
+.hometxt .desc {
+  font-size: 18px;
+  line-height: 1.6;
+  text-shadow: 0 0 6px #00000088;
+}
+
+.hometxt .social {
+  display: flex;
+  gap: 18px;
+  filter: invert(7%) sepia(100%) saturate(7471%) hue-rotate(356deg) brightness(104%) contrast(102%);
+}
+
+.hometxt .social a img {
+  height: 46px;
+  border: 2px solid black;
+  padding: 4px;
+  border-radius: 50%;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.hometxt .social a img:hover {
+  transform: scale(1.25) rotate(12deg);
+  box-shadow: 0 0 18px var(--red1);
+}
+
+/* ===== دکمه عمومی ===== */
+button.hire-btn,
+.contact-btn {
+  background-color: transparent;
+  font-weight: 700;
+  font-size: 18px;
+  border: 3px solid var(--red1);
+  color: var(--red1);
+  padding: 14px 42px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 0 0 transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+button.hire-btn:hover,
+.contact-btn:hover {
+  background-color: var(--red1);
+  color: white;
+  box-shadow: 0 0 20px var(--red1);
+  transform: scale(1.05);
+}
+
+/* ===== Services Section ===== */
+h1 {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--red1);
+  animation: fadeInScale 1.3s ease forwards;
+  opacity: 0;
+  text-shadow: 0 0 12px var(--red1);
+}
+
+.services-container {
+  max-width: 90vw;
+  margin: 40px auto 80px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  animation: fadeInUpBounce 1.5s ease forwards;
+  opacity: 0;
+}
+
+.service-card {
+  background-color: #121212;
+  border: 2px solid var(--red1);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.service-card:hover {
+  box-shadow: 0 0 25px var(--red1);
+  transform: translateY(-8px);
+}
+
+.service-card img {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  box-shadow: 0 0 15px var(--red1);
+  transition: transform 0.4s ease;
+}
+
+.service-card img:hover {
+  transform: scale(1.05) rotate(2deg);
+  filter: drop-shadow(0 0 10px #ff2a2aaa);
+}
+
+.service-card h3 {
+  font-size: 1.7rem;
+  color: var(--red1);
+  text-shadow: 0 0 12px var(--red1);
+  margin-bottom: 10px;
+}
+
+.service-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  text-shadow: 0 0 6px #00000088;
+}
+
+/* ===== انیمیشن‌ها ===== */
+@keyframes slideDownFade {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUpBounce {
+  0% { opacity: 0; transform: translateY(50px); }
+  60% { opacity: 1; transform: translateY(-15px); }
+  80% { transform: translateY(5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  0% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInLeftGlow {
+  0% { opacity: 0; transform: translateX(-70px); filter: drop-shadow(0 0 0 transparent); }
+  100% { opacity: 1; transform: translateX(0); filter: drop-shadow(0 0 12px #d70610cc); }
+}
+
+@keyframes slideInRightGlow {
+  0% { opacity: 0; transform: translateX(70px); filter: drop-shadow(0 0 0 transparent); }
+  100% { opacity: 1; transform: translateX(0); filter: drop-shadow(0 0 12px #d70610cc); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { text-shadow: 0 0 6px #d70610cc, 0 0 12px #d70610bb, 0 0 20px #d70610ee; }
+  50% { text-shadow: 0 0 14px #ff3b3bcc, 0 0 30px #ff3b3bcc, 0 0 40px #d70610ff; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ===== ریسپانسیو ===== */
+@media (max-width: 900px) {
+  .home {
+    flex-direction: column;
+    margin: 30px auto 60px;
+  }
+
+  .imghome {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 25px;
+  }
+
+  .hometxt {
+    max-width: 90vw;
+    align-items: center;
+    text-align: center;
+  }
+
+  nav {
+    position: relative;
+    z-index: 9;
+  }
+  nav .links {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    background-color: var(--bg-color);
+    position: absolute;
+    top: 70px;
+    right: 5%;
+    border: 1px solid var(--red1);
+    border-radius: 10px;
+    padding: 15px;
+    width: 150px;
+    z-index: 10;
+  }
+
+  nav .links.active {
+    display: flex;
+    position: fixed;
+  }
+
+  nav .menu-toggle {
+    display: block;
+  }
+
+  .services-container {
+    grid-template-columns: 1fr;
+  }
+}
