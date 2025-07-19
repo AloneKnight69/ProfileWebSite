@@ -122,42 +122,42 @@
   const loading = document.getElementById("loadingScreen");
   const frame = document.getElementById("contentFrame");
 
-  let firstLoad = true;       // فقط بار اول true هست
+  let firstLoad = true;
   let audioReady = false;
 
-  // بررسی آماده بودن کامل موزیک
-  const checkAudioInterval = setInterval(() => {
-    if (audio.readyState === 4) {
-      audioReady = true;
-      clearInterval(checkAudioInterval);
-      checkReady();
-    }
-  }, 300);
-
-  // بارگذاری اولیه
-  window.addEventListener("DOMContentLoaded", () => {
-    audio.load();
-    loadPageFromHash();
-  });
-
-  // لود کامل iframe
-  frame.addEventListener("load", () => {
-    if (firstLoad) {
-      checkReady(); // فقط بار اول نیاز داریم
-    } else {
-      frame.style.display = "block"; // برای صفحات بعدی
-    }
-  });
-
-  // بررسی اگر هردو آماده بودن
   function checkReady() {
-    if (audioReady && firstLoad) {
+    if (firstLoad && audioReady) {
       loading.style.display = "none";
       overlay.style.display = "flex";
     }
   }
 
-  // کلیک روی overlay
+  // فقط بار اول لود شدن iframe مهم است
+  function handleIframeLoad() {
+    if (firstLoad) {
+      checkReady();
+    } else {
+      frame.style.display = "block";
+    }
+  }
+
+  // بررسی آماده بودن کامل موزیک
+  const checkAudioInterval = setInterval(() => {
+    if (audio.readyState >= 4) {
+      audioReady = true;
+      clearInterval(checkAudioInterval);
+      checkReady();
+    }
+  }, 200);
+
+  // وقتی صفحه لود شد، همه چیز شروع کن
+  window.addEventListener("DOMContentLoaded", () => {
+    audio.load(); // شروع بافر آهنگ
+    loadPageFromHash();
+    frame.addEventListener("load", handleIframeLoad);
+  });
+
+  // کلیک روی overlay → وارد سایت
   overlay.addEventListener("click", () => {
     overlay.style.display = "none";
     frame.style.display = "block";
@@ -168,18 +168,18 @@
       };
       document.addEventListener("click", resume);
     });
-    firstLoad = false;
+    firstLoad = false; // از اینجا به بعد لودینگ دیگه لازم نیست
   });
 
-  // تعویض صفحات
+  // تغییر صفحه با هَش
   function loadPageFromHash() {
     const page = location.hash.substring(1) || "home.html";
     frame.src = page;
   }
 
   window.addEventListener("hashchange", () => {
-    frame.style.display = "none";
-    loadPageFromHash();
+    frame.style.display = "none"; // فید بشه برای صفحه جدید
+    loadPageFromHash();           // فقط iframe عوض بشه
   });
 </script>
 
