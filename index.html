@@ -117,62 +117,67 @@
   <audio id="bgMusic" src="Idea 22 Gibran Alcocer.mp3" loop></audio>
 
   <script>
-    const audio = document.getElementById("bgMusic");
-    const overlay = document.getElementById("startOverlay");
-    const loading = document.getElementById("loadingScreen");
-    const frame = document.getElementById("contentFrame");
+  const audio = document.getElementById("bgMusic");
+  const overlay = document.getElementById("startOverlay");
+  const loading = document.getElementById("loadingScreen");
+  const frame = document.getElementById("contentFrame");
 
-    let audioReady = false;
-    let pageReady = false;
+  let pageReady = false;
+  let audioReady = false;
 
-    // بارگذاری iframe
-    frame.addEventListener("load", () => {
-      pageReady = true;
-      checkReady();
-    });
+  // بارگذاری iframe
+  frame.addEventListener("load", () => {
+    pageReady = true;
+    checkReady();
+  });
 
-    // بارگذاری موسیقی
-    audio.addEventListener("canplaythrough", () => {
+  // چک کردن وضعیت آماده بودن واقعی فایل صوتی
+  const checkAudioInterval = setInterval(() => {
+    if (audio.readyState === 4) {
       audioReady = true;
+      clearInterval(checkAudioInterval);
       checkReady();
-    });
-
-    // بررسی آماده بودن هر دو
-    function checkReady() {
-      if (audioReady && pageReady) {
-        loading.style.display = "none";
-        overlay.style.display = "flex"; // حالا اجازه کلیک بده
-      }
     }
+  }, 300);
 
-    // صفحه مناسب از hash
-    function loadPageFromHash() {
-      const page = location.hash.substring(1) || "home.html";
-      frame.src = page;
+  function checkReady() {
+    if (pageReady && audioReady) {
+      loading.style.display = "none";
+      overlay.style.display = "flex";
     }
+  }
 
-    window.addEventListener("hashchange", () => {
-      frame.style.display = "none";
-      loadPageFromHash();
-    });
+  // بارگذاری فایل صوتی به صورت دستی
+  window.addEventListener("DOMContentLoaded", () => {
+    loadPageFromHash();
+    audio.load(); // شروع بافرینگ
+  });
 
-    window.addEventListener("DOMContentLoaded", () => {
-      loadPageFromHash();
-      audio.load();
-    });
+  // مدیریت hash برای iframe
+  function loadPageFromHash() {
+    const page = location.hash.substring(1) || "home.html";
+    frame.src = page;
+  }
 
-    // وقتی کاربر کلیک کرد، موزیک پخش و iframe نمایش داده شود
-    overlay.addEventListener("click", () => {
-      overlay.style.display = "none";
-      frame.style.display = "block";
-      audio.play().catch(() => {
-        const resume = () => {
-          audio.play();
-          document.removeEventListener("click", resume);
-        };
-        document.addEventListener("click", resume);
-      });
+  window.addEventListener("hashchange", () => {
+    frame.style.display = "none";
+    loadPageFromHash();
+  });
+
+  // کلیک روی صفحه استارت
+  overlay.addEventListener("click", () => {
+    overlay.style.display = "none";
+    frame.style.display = "block";
+
+    audio.play().catch(() => {
+      const resume = () => {
+        audio.play();
+        document.removeEventListener("click", resume);
+      };
+      document.addEventListener("click", resume);
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
