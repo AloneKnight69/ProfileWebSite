@@ -3,93 +3,176 @@
 <head>
   <meta charset="UTF-8" />
   <title>Alone knight</title>
-    <style>
-        
-        body, html {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        }
-        iframe {
-        border: none;
-        width: 100vw;
-        height: 100vh;
-        }
-        #startOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: black;
-        color: white;
-        font-family: sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 999;
-        cursor: pointer;
-        font-size: 2rem;
-        }
-        #startOverlay span{
-            animation: neonFlicker 2.5s infinite;
-        }
-        @keyframes neonFlicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-                text-shadow:
-                0 0 5px #d70610,
-                0 0 10px #d70610,
-                0 0 20px #d70610,
-                0 0 40px #ff0000,
-                0 0 80px #ff0000;
-                opacity: 1;
-            }
-            20%, 22%, 24%, 55% {
-                text-shadow: none;
-                opacity: 0.6;
-            }
-            26%, 53% {
-                text-shadow:
-                0 0 2px #d70610,
-                0 0 4px #d70610,
-                0 0 6px #d70610;
-                opacity: 0.8;
-            }
-        }
-    </style>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --neon-red: #d70610;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    iframe {
+      border: none;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+    }
+
+    /* صفحه‌ی کلیک */
+    #startOverlay {
+      position: fixed;
+      inset: 0;
+      background: black;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      cursor: pointer;
+      font-size: 2.5rem;
+      user-select: none;
+      flex-direction: column;
+    }
+
+    #startOverlay span {
+      animation: neonFlicker 2.5s infinite;
+    }
+
+    @keyframes neonFlicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow:
+          0 0 5px var(--neon-red),
+          0 0 10px var(--neon-red),
+          0 0 20px var(--neon-red),
+          0 0 40px red,
+          0 0 80px red;
+        opacity: 1;
+      }
+      20%, 22%, 24%, 55% {
+        text-shadow: none;
+        opacity: 0.5;
+      }
+      26%, 53% {
+        text-shadow:
+          0 0 2px var(--neon-red),
+          0 0 4px var(--neon-red),
+          0 0 6px var(--neon-red);
+        opacity: 0.8;
+      }
+    }
+
+    /* لودینگ */
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+      font-family: sans-serif;
+      font-size: 1.5rem;
+      z-index: 10000;
+    }
+
+    #loadingText {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #aaa;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-    <!-- پوشش شروع (برای دریافت تعامل کاربر) -->
-    <div id="startOverlay"><span>Click to Start</span></div>
 
-    <!-- iframe محتوای صفحه‌ها -->
-    <iframe src="home.html" id="contentFrame"></iframe>
+  <!-- لودینگ اولیه -->
+  <div id="loadingScreen">
+    <div>Loading resources...</div>
+    <div id="loadingText">Please wait</div>
+  </div>
 
-    <!-- موسیقی بک‌گراند -->
-    <audio id="bgMusic" src="Idea 22 Gibran Alcocer.mp3" loop></audio>
+  <!-- صفحه کلیک (بعد لودینگ) -->
+  <div id="startOverlay">
+    <span>Click to Start</span>
+  </div>
 
-    <script>
-        const audio = document.getElementById("bgMusic");
-        const overlay = document.getElementById("startOverlay");
-        const frame = document.getElementById("contentFrame");
+  <!-- iframe -->
+  <iframe src="" id="contentFrame"></iframe>
 
-        // تعامل اول کاربر → پخش موسیقی
-        overlay.addEventListener("click", () => {
-        overlay.style.display = "none"; // حذف پوشش
-        audio.volume = 1;
-        audio.play().catch(err => console.log("Audio error:", err));
-        });
+  <!-- موزیک -->
+  <audio id="bgMusic" src="Idea 22 Gibran Alcocer.mp3" loop></audio>
 
-        // بارگذاری صفحه مناسب با hash
-        function loadPageFromHash() {
-        const page = location.hash.substring(1) || "home.html";
-        frame.src = page;
-        }
+  <script>
+    const audio = document.getElementById("bgMusic");
+    const overlay = document.getElementById("startOverlay");
+    const loading = document.getElementById("loadingScreen");
+    const frame = document.getElementById("contentFrame");
 
-        window.addEventListener("hashchange", loadPageFromHash);
-        window.addEventListener("DOMContentLoaded", loadPageFromHash);
-    </script>
+    let audioReady = false;
+    let pageReady = false;
+
+    // بارگذاری iframe
+    frame.addEventListener("load", () => {
+      pageReady = true;
+      checkReady();
+    });
+
+    // بارگذاری موسیقی
+    audio.addEventListener("canplaythrough", () => {
+      audioReady = true;
+      checkReady();
+    });
+
+    // بررسی آماده بودن هر دو
+    function checkReady() {
+      if (audioReady && pageReady) {
+        loading.style.display = "none";
+        overlay.style.display = "flex"; // حالا اجازه کلیک بده
+      }
+    }
+
+    // صفحه مناسب از hash
+    function loadPageFromHash() {
+      const page = location.hash.substring(1) || "home.html";
+      frame.src = page;
+    }
+
+    window.addEventListener("hashchange", () => {
+      frame.style.display = "none";
+      loadPageFromHash();
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadPageFromHash();
+      audio.load();
+    });
+
+    // وقتی کاربر کلیک کرد، موزیک پخش و iframe نمایش داده شود
+    overlay.addEventListener("click", () => {
+      overlay.style.display = "none";
+      frame.style.display = "block";
+      audio.play().catch(() => {
+        const resume = () => {
+          audio.play();
+          document.removeEventListener("click", resume);
+        };
+        document.addEventListener("click", resume);
+      });
+    });
+  </script>
 </body>
 </html>
